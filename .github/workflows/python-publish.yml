@@ -29,7 +29,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nadoutti/ingressos:${{ github.sha }}
+          tags: nadoutti/pf-back:${{ github.sha }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
@@ -39,6 +39,6 @@ jobs:
           key: ${{ secrets.KEY_TEST }}
           port: 22
           script: |
-            sudo docker stop ingressos
-            sudo docker rm --force ingressos
-            sudo docker run  -d -p 8080:8000 -e MONGO_URL=${{ secrets.SHOW_SERVICE_URL }} --network=rede --name ingressos nadoutti/pf-back:${{ github.sha }}
+            sudo docker stop pf-back
+            sudo docker rm --force pf-back
+            sudo docker run  -d -p 8080:8000 -e MONGO_URI=${{ secrets.MONGO_URI }} -e AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }} -e AUTH0_AUDIENCE=${{ secrets.AUTH0_AUDIENCE }} -e AUTH0_NAMESPACE=${{ secrets.AUTH0_NAMESPACE }} -e MONGO_DB_NAME=${{ secrets.MONGO_DB_NAME }} --network=rede --name ingressos nadoutti/pf-back:${{ github.sha }}
